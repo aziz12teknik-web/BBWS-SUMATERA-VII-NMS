@@ -1,0 +1,58 @@
+{
+    "1": {
+        "name": "Router Utama (Kantor/Rapat)",
+        "ip": "192.168.25.1",
+        "band": "5 GHz",
+        "status": "ping",
+        "x": -1.4,
+        "z": 1.6
+    },
+    "2": {
+        "name": "AP",
+        "ip": "192.168.25.10",
+        "band": "2.4 GHz",
+        "status": "ping",
+        "x": 5.5,
+        "z": 4.5,
+        "type": "wifi",
+        "icon": "fa-wifi"
+    },
+    "3": {
+        "name": "Smart TV Ruang Rapat",
+        "ip": "192.168.25.50",
+        "band": "Wi-Fi Lokal",
+        "status": "simulasi_mati",
+        "x": -5.5,
+        "z": -4.5
+    },
+    "4": {
+        "name": "Router Utama (Percobaan)",
+        "ip": "192.168.100.1",
+        "band": "5 GHz",
+        "status": "ping",
+        "x": 3.6,
+        "z": -0.3,
+        "type": "wifi",
+        "icon": "fa-wifi"
+    },
+    "5": {
+        "name": "111111",
+        "ip": "111111",
+        "band": "2.4 GHz",
+        "status": "ping",
+        "type": "tv",
+        "icon": "fa-tv",
+        "x": 5.5,
+        "z": -4.5
+    },
+    "6": {
+        "name": "222222",
+        "ip": "222222",
+        "band": "2.4 GHz",
+        "status": "ping",
+        "type": "server",
+        "icon": "fa-server",
+        "x": -5.5,
+        "z": 4.5
+    }
+}
