@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NMS - BBWS Sumatera VIII</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans antialiased min-h-screen p-6">
+    <div class="max-w-7xl mx-auto space-y-6">
+        
+        <!-- Header -->
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center bg-white border border-gray-200 border-t-4 border-t-amber-400 p-6 rounded-2xl shadow-sm gap-4">
+            <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 bg-amber-400 rounded-xl overflow-hidden flex items-center justify-center shadow-inner border border-amber-500">
+                    <!-- Logo BBWS / PUPR -->
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c6/Logo_Kementerian_Pekerjaan_Umum_Republik_Indonesia.svg" alt="Logo BBWS" class="w-full h-full object-cover">
+                </div>
+                <div>
+                    <h1 class="text-xs tracking-widest text-blue-900 font-bold uppercase">BBWS SUMATERA VIII</h1>
+                    <h2 class="text-2xl font-black text-gray-900">NETWORK MONITORING SYSTEM</h2>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-3 bg-gray-50 px-4 py-2 rounded-xl border border-gray-200">
+                    <span class="relative flex h-3 w-3">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                    </span>
+                    <!-- Jam dengan tambahan teks WIB -->
+                    <span class="text-sm font-mono text-emerald-600 font-bold"><span id="live-clock">00:00:00</span> WIB</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Status Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-white border border-gray-200 border-t-4 border-t-blue-900 p-5 rounded-2xl flex justify-between items-center shadow-sm">
+                <div>
+                    <p class="text-xs text-gray-500 font-bold uppercase">Total Perangkat</p>
+                    <span id="stat-total" class="text-3xl font-black text-gray-900 mt-1 block">6</span>
+                    <span class="text-xs text-gray-400 mt-1 block">Semua Lantai Dasar</span>
+                </div>
+                <div class="w-12 h-12 bg-gray-100 border border-gray-200 rounded-xl flex items-center justify-center text-gray-600 text-xl shadow-inner">
+                    <i class="fa-solid fa-wifi"></i>
+                </div>
+            </div>
+
+            <div class="bg-white border border-gray-200 border-t-4 border-t-blue-900 p-5 rounded-2xl flex justify-between items-center shadow-sm">
+                <div>
+                    <p class="text-xs text-emerald-600 font-bold uppercase">Online (Aman)</p>
+                    <span id="stat-online" class="text-3xl font-black text-emerald-600 mt-1 block">-</span>
+                    <span class="text-xs text-emerald-500 mt-1 block">Aktif normal</span>
+                </div>
+                <div class="w-12 h-12 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center justify-center text-emerald-600 text-xl shadow-inner">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+            </div>
+
+            <div class="bg-white border border-gray-200 border-t-4 border-t-blue-900 p-5 rounded-2xl flex justify-between items-center shadow-sm">
+                <div>
+                    <p class="text-xs text-amber-600 font-bold uppercase">Warning (High Latency)</p>
+                    <span id="stat-warning" class="text-3xl font-black text-amber-600 mt-1 block">0</span>
+                    <span class="text-xs text-amber-500 mt-1 block">&gt; 100ms response</span>
+                </div>
+                <div class="w-12 h-12 bg-amber-50 border border-amber-200 rounded-xl flex items-center justify-center text-amber-600 text-xl shadow-inner">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+            </div>
+
+            <div class="bg-white border border-gray-200 border-t-4 border-t-blue-900 p-5 rounded-2xl flex justify-between items-center shadow-sm">
+                <div>
+                    <p class="text-xs text-red-600 font-bold uppercase">Offline / Mati</p>
+                    <span id="stat-offline" class="text-3xl font-black text-red-600 mt-1 block">-</span>
+                    <span class="text-xs text-red-500 mt-1 block">Perlu pengecekan teknis</span>
+                </div>
+                <div class="w-12 h-12 bg-red-50 border border-red-200 rounded-xl flex items-center justify-center text-red-600 text-xl shadow-inner">
+                    <i class="fa-solid fa-circle-xmark"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Peta Topologi (Bar/garis atas sudah dihilangkan) -->
+            <div class="lg:col-span-2 bg-white border border-gray-200 rounded-2xl p-6 flex flex-col shadow-sm">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-bold text-gray-900">Peta Topologi Perangkat</h3>
+                </div>
+                <div class="relative w-full h-[420px] bg-gray-950 border border-gray-800 rounded-xl overflow-hidden flex items-center justify-center">
+                    <iframe id="denah-iframe" src="/denah3d" class="w-full h-full border-0"></iframe>
+                </div>
+            </div>
+
+            <!-- Panel Kanan (Detail Perangkat & Log Sistem) -->
+            <div class="space-y-6 flex flex-col">
+                <div class="bg-white border border-gray-200 border-t-4 border-t-blue-900 rounded-2xl p-6 flex-1 flex flex-col justify-between shadow-sm">
+                    <div>
+                        <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4"><i class="fa-solid fa-circle-info mr-2"></i> Detail Perangkat</h3>
+                        <div id="device-detail" class="text-gray-600 text-sm space-y-3">
+                            <p class="italic text-gray-400">Pilih perangkat di peta atau daftar untuk melihat informasi lengkap.</p>
+                        </div>
+                    </div>
+                    <div id="edit-action-container" class="mt-4 pt-4 border-t border-gray-100 hidden space-y-2">
+                        <button onclick="openEditModal()" class="w-full bg-amber-600 hover:bg-amber-500 text-white py-2 rounded-xl text-xs font-bold shadow transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-pen-to-square"></i> Edit Perangkat Ini
+                        </button>
+                        <button onclick="deleteSelectedDevice()" class="w-full bg-red-600 hover:bg-red-500 text-white py-2 rounded-xl text-xs font-bold shadow transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-trash"></i> Hapus Perangkat Ini
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-gray-200 border-t-4 border-t-blue-900 rounded-2xl p-6 shadow-sm">
+                    <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3"><i class="fa-solid fa-clock-rotate-left mr-2"></i> Log Sistem</h3>
+                    <div id="log-container" class="space-y-2 text-xs font-mono max-h-32 overflow-y-auto pr-1 mb-4 bg-gray-50 p-2 rounded-lg border border-gray-200">
+                        <div class="p-2 rounded bg-white border border-gray-200 text-blue-600">[Sistem] Menunggu data ping pertama...</div>
+                    </div>
+                    
+                    <button onclick="openAddModal()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-2.5 rounded-xl text-sm font-bold shadow transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-plus"></i> Tambah Perangkat Baru
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Tambah Perangkat -->
+    <div id="addDeviceModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-white border border-gray-200 rounded-2xl p-6 w-full max-w-md space-y-4 shadow-2xl">
+            <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+                <h3 class="text-lg font-bold text-gray-900"><i class="fa-solid fa-plus-circle text-blue-600 mr-2"></i> Tambah Perangkat Baru</h3>
+                <button onclick="closeAddModal()" class="text-gray-400 hover:text-gray-700"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="addDeviceForm" onsubmit="submitNewDevice(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Nama Perangkat</label>
+                    <input type="text" id="devName" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-gray-900 text-sm focus:outline-none focus:border-blue-600" placeholder="Contoh: AP Lantai 2">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">IP Address</label>
+                    <input type="text" id="devIp" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-gray-900 text-sm focus:outline-none focus:border-blue-600" placeholder="Contoh: 192.168.25.20">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Jenis Perangkat</label>
+                    <select id="devType" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-gray-900 text-sm focus:outline-none focus:border-blue-600">
+                        <option value="router">Router</option>
+                        <option value="ap">Access Point (AP)</option>
+                        <option value="wifi">Wi-Fi / Hotspot</option>
+                        <option value="tv">Smart TV</option>
+                        <option value="laptop">Laptop / PC</option>
+                        <option value="server">Server</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Frekuensi / Band</label>
+                    <input type="text" id="devBand" value="2.4 GHz" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-gray-900 text-sm focus:outline-none focus:border-blue-600">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Posisi X</label>
+                        <input type="number" step="0.5" id="devX" value="0" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-gray-900 text-sm focus:outline-none focus:border-blue-600">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Posisi Z</label>
+                        <input type="number" step="0.5" id="devZ" value="0" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-gray-900 text-sm focus:outline-none focus:border-blue-600">
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-2 pt-3">
+                    <button type="button" onclick="closeAddModal()" class="px-4 py-2 rounded-xl bg-gray-100 text-gray-600 text-sm font-bold hover:bg-gray-200">Batal</button>
+                    <button type="submit" class="px-4 py-2 rounded-xl bg-blue-600 text-white text-sm font-bold hover:bg-blue-500">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Edit Perangkat -->
+    <div id="editDeviceModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-white border border-gray-200 rounded-2xl p-6 w-full max-w-md space-y-4 shadow-2xl">
+            <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+                <h3 class="text-lg font-bold text-gray-900"><i class="fa-solid fa-pen-to-square text-amber-500 mr-2"></i> Edit Perangkat</h3>
+                <button onclick="closeEditModal()" class="text-gray-400 hover:text-gray-700"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="editDeviceForm" onsubmit="submitEditDevice(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Nama Perangkat</label>
+                    <input type="text" id="editDevName" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-gray-900 text-sm focus:outline-none focus:border-amber-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">IP Address</label>
+                    <input type="text" id="editDevIp" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-gray-900 text-sm focus:outline-none focus:border-amber-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Jenis Perangkat</label>
+                    <select id="editDevType" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-gray-900 text-sm focus:outline-none focus:border-amber-500">
+                        <option value="router">Router</option>
+                        <option value="ap">Access Point (AP)</option>
+                        <option value="wifi">Wi-Fi / Hotspot</option>
+                        <option value="tv">Smart TV</option>
+                        <option value="laptop">Laptop / PC</option>
+                        <option value="server">Server</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Frekuensi / Band</label>
+                    <input type="text" id="editDevBand" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-gray-900 text-sm focus:outline-none focus:border-amber-500">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Posisi X</label>
+                        <input type="number" step="0.5" id="editDevX" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-gray-900 text-sm focus:outline-none focus:border-amber-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Posisi Z</label>
+                        <input type="number" step="0.5" id="editDevZ" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-gray-900 text-sm focus:outline-none focus:border-amber-500">
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-2 pt-3">
+                    <button type="button" onclick="closeEditModal()" class="px-4 py-2 rounded-xl bg-gray-100 text-gray-600 text-sm font-bold hover:bg-gray-200">Batal</button>
+                    <button type="submit" class="px-4 py-2 rounded-xl bg-amber-600 text-white text-sm font-bold hover:bg-amber-500">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let latestDeviceData = {};
+        let selectedId = 1;
+
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('live-clock').innerText = now.toTimeString().split(' ')[0];
+        }, 1000);
+
+        function openAddModal() {
+            document.getElementById('addDeviceModal').classList.remove('hidden');
+            document.getElementById('addDeviceModal').classList.add('flex');
+        }
+        function closeAddModal() {
+            document.getElementById('addDeviceModal').classList.remove('flex');
+            document.getElementById('addDeviceModal').classList.add('hidden');
+        }
+
+        function openEditModal() {
+            const dev = latestDeviceData[selectedId];
+            if (!dev) return;
+            document.getElementById('editDevName').value = dev.name;
+            document.getElementById('editDevIp').value = dev.ip;
+            document.getElementById('editDevType').value = dev.type || 'router';
+            document.getElementById('editDevBand').value = dev.band || '2.4 GHz';
+            document.getElementById('editDevX').value = dev.x || 0;
+            document.getElementById('editDevZ').value = dev.z || 0;
+
+            document.getElementById('editDeviceModal').classList.remove('hidden');
+            document.getElementById('editDeviceModal').classList.add('flex');
+        }
+        function closeEditModal() {
+            document.getElementById('editDeviceModal').classList.remove('flex');
+            document.getElementById('editDeviceModal').classList.add('hidden');
+        }
+
+        function submitNewDevice(event) {
+            event.preventDefault();
+            const data = {
+                name: document.getElementById('devName').value,
+                ip: document.getElementById('devIp').value,
+                type: document.getElementById('devType').value,
+                band: document.getElementById('devBand').value,
+                x: parseFloat(document.getElementById('devX').value),
+                z: parseFloat(document.getElementById('devZ').value)
+            };
+
+            fetch('/api/devices', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(response => {
+                if(response.success) {
+                    closeAddModal();
+                    document.getElementById('addDeviceForm').reset();
+                    fetchNetworkStatus();
+                    document.getElementById('denah-iframe').contentWindow.location.reload();
+                }
+            })
+            .catch(err => alert("Gagal menambah perangkat: " + err));
+        }
+
+        function submitEditDevice(event) {
+            event.preventDefault();
+            const data = {
+                name: document.getElementById('editDevName').value,
+                ip: document.getElementById('editDevIp').value,
+                type: document.getElementById('editDevType').value,
+                band: document.getElementById('editDevBand').value,
+                x: parseFloat(document.getElementById('editDevX').value),
+                z: parseFloat(document.getElementById('editDevZ').value)
+            };
+
+            fetch(`/api/devices/${selectedId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(response => {
+                if(response.success) {
+                    closeEditModal();
+                    fetchNetworkStatus();
+                    document.getElementById('denah-iframe').contentWindow.location.reload();
+                }
+            })
+            .catch(err => alert("Gagal mengedit perangkat: " + err));
+        }
+
+        function deleteSelectedDevice() {
+            const dev = latestDeviceData[selectedId];
+            if (!dev) return;
+            if (!confirm(`Apakah Anda yakin ingin menghapus perangkat "${dev.name}"?`)) return;
+
+            fetch(`/api/devices/${selectedId}`, {
+                method: 'DELETE'
+            })
+            .then(res => res.json())
+            .then(response => {
+                if(response.success || response.status === 'success') {
+                    fetchNetworkStatus();
+                    document.getElementById('denah-iframe').contentWindow.location.reload();
+                } else {
+                    alert("Gagal menghapus perangkat.");
+                }
+            })
+            .catch(err => alert("Gagal menghapus perangkat: " + err));
+        }
+
+        function fetchNetworkStatus() {
+            fetch('/api/status')
+                .then(response => response.json())
+                .then(data => {
+                    latestDeviceData = data;
+                    let onlineCount = 0;
+                    let offlineCount = 0;
+                    let totalCount = Object.keys(data).length;
+
+                    for (const [id, dev] of Object.entries(data)) {
+                        if (dev.status === 'online') onlineCount++;
+                        else offlineCount++;
+                    }
+
+                    document.getElementById('stat-total').innerText = totalCount;
+                    document.getElementById('stat-online').innerText = onlineCount;
+                    document.getElementById('stat-offline').innerText = offlineCount;
+
+                    if (latestDeviceData[selectedId]) {
+                        selectDevice(selectedId, false);
+                    }
+                })
+                .catch(err => console.error("Gagal mengambil data status:", err));
+        }
+
+        function selectDevice(id, logIt = true) {
+            selectedId = id;
+            const dev = latestDeviceData[id];
+            const detailEl = document.getElementById('device-detail');
+            const editActionEl = document.getElementById('edit-action-container');
+            
+            if (!dev) return;
+
+            editActionEl.classList.remove('hidden');
+
+            let statusBadge = '';
+            if (dev.status === 'online') {
+                statusBadge = '<span class="px-2.5 py-1 bg-emerald-100 text-emerald-700 border border-emerald-300 rounded font-bold text-xs">AMAN (ONLINE)</span>';
+            } else if (dev.status === 'offline') {
+                statusBadge = '<span class="px-2.5 py-1 bg-red-100 text-red-700 border border-red-300 rounded font-bold text-xs">GANGGUAN (OFFLINE)</span>';
+            } else {
+                statusBadge = '<span class="px-2.5 py-1 bg-gray-100 text-gray-600 border border-gray-300 rounded font-bold text-xs">NONAKTIF</span>';
+            }
+
+            detailEl.innerHTML = `
+                <div class="space-y-3">
+                    <p class="text-gray-900 font-bold text-base border-b border-gray-100 pb-2">${dev.name}</p>
+                    <div class="flex justify-between border-b border-gray-100 pb-2"><span>IP Address:</span> <strong class="text-gray-900 font-mono">${dev.ip}</strong></div>
+                    <div class="flex justify-between border-b border-gray-100 pb-2 items-center"><span>Status Real-Time:</span> ${statusBadge}</div>
+                    <div class="flex justify-between border-b border-gray-100 pb-2"><span>Latensi Ping:</span> <strong class="text-gray-900 font-mono">${dev.latency}</strong></div>
+                    <div class="flex justify-between pb-1"><span>Posisi Koordinat:</span> <strong class="text-gray-900 font-mono">X: ${dev.x}, Z: ${dev.z}</strong></div>
+                </div>
+            `;
+
+            if (logIt) {
+                const logContainer = document.getElementById('log-container');
+                const timeStr = new Date().toTimeString().split(' ')[0];
+                logContainer.innerHTML += `<div class="p-2 rounded bg-white border border-gray-200 text-gray-700">[${timeStr}] Memilih ${dev.name}</div>`;
+                logContainer.scrollTop = logContainer.scrollHeight;
+            }
+        }
+
+        window.addEventListener('message', (event) => {
+            if (event.data && event.data.type === 'deviceMoved') {
+                const { id, x, z } = event.data;
+                if (latestDeviceData[id]) {
+                    latestDeviceData[id].x = x;
+                    latestDeviceData[id].z = z;
+                    if (selectedId == id) {
+                        selectDevice(id, false);
+                    }
+                }
+            }
+        });
+
+        fetchNetworkStatus();
+        setInterval(fetchNetworkStatus, 4000);
+    </script>
+</body>
+</html>
